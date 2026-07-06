@@ -2,7 +2,7 @@
   "canonical_sha256": "b56232eabe8d9981e25f63b6a74c7a235dcce579da8a6a1cef0b61bb695e561e",
   "errors": [],
   "first_timestamp": "20040301-0000",
-  "git_commit": "cd0f798314c1f759b2c6a2520128a6450197994c",
+  "git_commit": "d9f620b140a180753e70c8d4a0da9df2db8e046b",
   "last_timestamp": "20040910-2355",
   "materialized_full_dataset": false,
   "maximum_conservation_error_mbps": 6.59383658785373e-12,
@@ -764,6 +764,6 @@
   },
   "status": "PASS",
   "temporal_slot_count": 48096,
-  "validated_at_utc": "2026-07-06T10:54:49Z",
+  "validated_at_utc": "2026-07-06T10:56:51Z",
   "warnings": []
 }
