@@ -40,7 +40,7 @@
 
 ### 2.1 时间总量
 
-`total_demand` 的单位为 Mbit/s，作为未缩放的基础 OD 总量。`global_intensity` 仅用作可追溯特征，不再乘回总量。第二阶段的 `demand_scale` 保持独立参数：本阶段提供标定接口，实际数值必须在第五/六阶段具备 Dijkstra 和链路利用率后仅用 train 分区求得。
+`total_demand` 的单位为 Mbit/s，作为未缩放的基础 OD 总量。`global_intensity` 仅用作可追溯特征，不再乘回总量。Abilene 原始日历仅保留为 `source_timestamp`；当地活动、轨道和接入统一使用 `simulation_datetime = epoch_utc + timestamp_index * traffic_interval_s`。第二阶段的 `demand_scale` 保持独立参数：本阶段提供标定接口，实际数值必须在第五/六阶段具备 Dijkstra 和链路利用率后仅用 train 分区求得。
 
 ### 2.2 当地日周活跃度
 

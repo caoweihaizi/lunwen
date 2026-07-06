@@ -5,7 +5,8 @@
 | 字段 | 类型 | 单位 | 约束 | 用途 |
 |---|---|---|---|---|
 | `timestamp_index` | int | 5 min slot | `0..48095` 连续 | 分区、轨道时间和场景索引 |
-| `timestamp` | string | UTC calendar | `YYYYMMDD-HHMM`，允许官方采集间断 | 当地时间活跃度 |
+| `source_timestamp` | string | UTC calendar | `YYYYMMDD-HHMM`，允许官方采集间断 | 仅作 Abilene 溯源 |
+| `simulation_timestamp_utc` | datetime | UTC | `epoch_utc + timestamp_index×300s` | 当地活动、轨道与接入的唯一时间轴 |
 | `total_demand_mbps` | float | Mbit/s | 非负、有限，slot 内 132 行一致 | 基础 OD 总量 |
 | `global_intensity` | float | ratio | 非负、有限 | 预测特征，不二次缩放总量 |
 

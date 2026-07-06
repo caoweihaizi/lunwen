@@ -32,10 +32,10 @@ def _markdown(audit, validated_at):
     ]
     for name, ids in audit["scenario_hotspots"].items():
         lines.append(f"- `{name}`: `{ids}`")
-    lines.extend(["", "## 分区样本审计", "", "| slot | partition | scenario | relative | base | scenario | mapped | local | backlog | error |", "|---:|---|---|---:|---:|---:|---:|---:|---:|---:|"])
+    lines.extend(["", "## 分区样本审计", "", "| slot | simulation time | partition | scenario | relative | base | scenario | mapped | local | backlog | error |", "|---:|---|---|---|---:|---:|---:|---:|---:|---:|---:|"])
     for record in audit["sample_records"]:
         lines.append(
-            f"| {record['time_slot']} | {record['partition']} | {record['scenario']} | {record['relative_slot']} | "
+            f"| {record['time_slot']} | {record['simulation_timestamp_utc']} | {record['partition']} | {record['scenario']} | {record['relative_slot']} | "
             f"{record['base_total_mbps']:.6f} | {record['scenario_total_mbps']:.6f} | {record['mapped_satellite_od_mbps']:.6f} | "
             f"{record['local_delivery_mbps']:.6f} | {record['access_backlog_mbps']:.6f} | {record['conservation_error_mbps']:.3e} |"
         )

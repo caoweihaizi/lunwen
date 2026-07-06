@@ -17,7 +17,7 @@ from mucar_demand.config import load_demand_contract
 from mucar_demand.factorized import FactorizedOD
 from mucar_demand.interventions import apply_intervention, choose_hotspots
 from mucar_demand.spatial import DemandRegion, activity_multiplier, spatial_weights
-from mucar_demand.temporal import iter_temporal_slots
+from mucar_demand.temporal import iter_temporal_slots, simulation_datetime
 from mucar_sim.coverage import AccessAssignment
 
 
@@ -111,7 +111,13 @@ class DemandTests(unittest.TestCase):
                 stream.write("1,20040402-0000,a,b,1,11,1,0.1\n")
             slots = tuple(iter_temporal_slots(path, expected_rows_per_slot=1))
             self.assertEqual([slot.timestamp_index for slot in slots], [0, 1])
-            self.assertGreater((slots[1].timestamp_utc - slots[0].timestamp_utc).total_seconds(), 300)
+            self.assertGreater((slots[1].source_timestamp_utc - slots[0].source_timestamp_utc).total_seconds(), 300)
+
+    def test_simulation_time_remains_continuous_across_source_calendar_gap(self):
+        left = simulation_datetime(self.simulation_contract, 4031)
+        right = simulation_datetime(self.simulation_contract, 4032)
+        self.assertEqual((right - left).total_seconds(), 300)
+        self.assertEqual(simulation_datetime(self.simulation_contract, 0).isoformat(), "2025-01-01T00:00:00+00:00")
 
     def test_demand_audit_cli_writes_pass_manifest(self):
         with tempfile.TemporaryDirectory() as td:

@@ -11,6 +11,7 @@ from .config import DemandContract
 from .factorized import FactorizedOD
 from .interventions import apply_intervention, choose_hotspots
 from .spatial import DemandRegion, spatial_weights
+from .temporal import simulation_datetime
 
 
 def canonical_demand_hash(audit: Mapping[str, object]):
@@ -44,7 +45,8 @@ def audit_demand_pipeline(demand: DemandContract, research: ResearchContract, si
     records = []
     for sample_number, slot_index in enumerate(_sample_indices(research)):
         slot = temporal_slots[slot_index]
-        weights = spatial_weights(regions, slot.timestamp_utc, demand)
+        current_simulation_time = simulation_datetime(simulation, slot_index)
+        weights = spatial_weights(regions, current_simulation_time, demand)
         base = FactorizedOD.from_weights(slot.total_demand_mbps, region_ids, weights, weights)
         positions = propagate(simulation, satellites, slot_index * simulation.traffic_interval_s)
         assignments = assign_access(simulation, positions, ground_regions)
@@ -63,6 +65,8 @@ def audit_demand_pipeline(demand: DemandContract, research: ResearchContract, si
                 errors.append(f"conservation failed at slot {slot_index} scenario {name}: {error}")
             records.append({
                 "time_slot": slot_index, "partition": next(key for key, split in research.splits.items() if split.start <= slot_index < split.stop),
+                "source_timestamp": slot.timestamp,
+                "simulation_timestamp_utc": current_simulation_time.isoformat().replace("+00:00", "Z"),
                 "scenario": name, "relative_slot": relative_slot,
                 "base_total_mbps": metadata["base_total_mbps"], "scenario_total_mbps": metadata["scenario_total_mbps"],
                 "mapped_satellite_od_mbps": aggregation.satellite_od_mbps,

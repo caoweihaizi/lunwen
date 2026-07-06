@@ -11,7 +11,7 @@ from typing import Iterator, Optional
 class TemporalSlot:
     timestamp_index: int
     timestamp: str
-    timestamp_utc: dt.datetime
+    source_timestamp_utc: dt.datetime
     total_demand_mbps: float
     global_intensity: float
 
@@ -21,6 +21,19 @@ def _timestamp(value: str):
         return dt.datetime.strptime(value, "%Y%m%d-%H%M").replace(tzinfo=dt.timezone.utc)
     except ValueError as exc:
         raise ValueError(f"invalid Abilene timestamp: {value}") from exc
+
+
+def simulation_datetime(simulation_contract, timestamp_index: int):
+    if isinstance(timestamp_index, bool) or not isinstance(timestamp_index, int) or timestamp_index < 0:
+        raise ValueError("timestamp_index must be a nonnegative integer")
+    epoch = simulation_contract.time.epoch_utc
+    if not isinstance(epoch, str) or not epoch.endswith("Z"):
+        raise ValueError("simulation epoch must be a UTC string ending in Z")
+    try:
+        start = dt.datetime.fromisoformat(epoch[:-1] + "+00:00")
+    except ValueError as exc:
+        raise ValueError(f"invalid simulation epoch: {epoch}") from exc
+    return start + dt.timedelta(seconds=timestamp_index * simulation_contract.traffic_interval_s)
 
 
 def iter_temporal_slots(path: Path, expected_rows_per_slot: Optional[int] = 132) -> Iterator[TemporalSlot]:
