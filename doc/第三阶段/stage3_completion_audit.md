@@ -30,8 +30,8 @@
 | 空故障运行拓扑 | 每快照 `G_op == G_orb` | 通过 |
 | 地面区域数 | 980 | 通过 |
 | 无覆盖不静默映射 | `AccessAssignment.access_backlog` | 通过 |
-| 不同 `PYTHONHASHSEED` 的规范化哈希 | `2b7dfeb4937640225c16a16030f0a91ada7561ad4ca8770aa588dfb88fb3a58b` | 通过 |
-| 第一至第三阶段回归测试 | 45 项测试，0 failure / 0 error | 通过 |
+| 不同 `PYTHONHASHSEED` 的规范化哈希 | `b2030113e6b8d73664b18212d7179922de29646a9470d2ab951dbd8762dddec3` | 通过 |
+| 第一至第三阶段回归测试 | 46 项测试，0 failure / 0 error | 通过 |
 
 ## 覆盖结果与边界
 
@@ -40,6 +40,7 @@
 - 最长连续无覆盖时间为 130 s，小于一个 300 s 业务时隔；
 - 本阶段保留该结果，由 `access_backlog` 显式承接，不把无覆盖区域映射到地平线以下的卫星；
 - 此处的“未触发长时间空洞回退”按“持续时间小于一个业务时隔”判定。第四阶段不得删除 backlog 来美化覆盖。
+- `handover_count` 只计相邻两个有覆盖快照之间的换星；backlog 之后恢复覆盖计入 `reattachment_count`，本轨道周期合计 587 次。
 
 ## 可复现命令
 

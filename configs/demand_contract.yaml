@@ -1,0 +1,19 @@
+schema_version: "1.0"
+activity:
+  floor: 0.35
+  amplitude: 0.65
+  peak_local_hour: 14.0
+  period_hours: 24.0
+od:
+  exclude_self_flows: true
+  conservation_abs_tolerance_mbps: 0.000000001
+  conservation_rel_tolerance: 0.000000000001
+scenarios:
+  normal: {scenario_id: 0, hotspot_count: 0, multiplier_start: 1.0, multiplier_end: 1.0, duration_slots: 0}
+  local_burst: {scenario_id: 1, hotspot_count: 5, multiplier_start: 4.0, multiplier_end: 4.0, duration_slots: 12}
+  persistent_hotspot: {scenario_id: 2, hotspot_count: 5, multiplier_start: 2.0, multiplier_end: 2.0, duration_slots: 288}
+  slow_drift: {scenario_id: 3, hotspot_count: 10, multiplier_start: 1.0, multiplier_end: 1.5, duration_slots: 2016}
+audit:
+  slots_per_split: 3
+  expected_temporal_slots: 48096
+  expected_regions: 980

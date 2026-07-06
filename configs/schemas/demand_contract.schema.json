@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "activity", "od", "scenarios", "audit"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "activity": {"type": "object", "additionalProperties": false, "required": ["floor", "amplitude", "peak_local_hour", "period_hours"], "properties": {"floor": {"type": "number", "minimum": 0}, "amplitude": {"type": "number", "minimum": 0}, "peak_local_hour": {"type": "number", "minimum": 0, "exclusiveMaximum": 24}, "period_hours": {"const": 24.0}}},
+    "od": {"type": "object", "additionalProperties": false, "required": ["exclude_self_flows", "conservation_abs_tolerance_mbps", "conservation_rel_tolerance"], "properties": {"exclude_self_flows": {"const": true}, "conservation_abs_tolerance_mbps": {"type": "number", "exclusiveMinimum": 0}, "conservation_rel_tolerance": {"type": "number", "exclusiveMinimum": 0}}},
+    "scenarios": {"type": "object", "additionalProperties": false, "required": ["normal", "local_burst", "persistent_hotspot", "slow_drift"], "properties": {"normal": {"$ref": "#/$defs/scenario"}, "local_burst": {"$ref": "#/$defs/scenario"}, "persistent_hotspot": {"$ref": "#/$defs/scenario"}, "slow_drift": {"$ref": "#/$defs/scenario"}}},
+    "audit": {"type": "object", "additionalProperties": false, "required": ["slots_per_split", "expected_temporal_slots", "expected_regions"], "properties": {"slots_per_split": {"type": "integer", "minimum": 1}, "expected_temporal_slots": {"const": 48096}, "expected_regions": {"const": 980}}}
+  },
+  "$defs": {"scenario": {"type": "object", "additionalProperties": false, "required": ["scenario_id", "hotspot_count", "multiplier_start", "multiplier_end", "duration_slots"], "properties": {"scenario_id": {"type": "integer", "minimum": 0}, "hotspot_count": {"type": "integer", "minimum": 0}, "multiplier_start": {"type": "number", "minimum": 1}, "multiplier_end": {"type": "number", "minimum": 1}, "duration_slots": {"type": "integer", "minimum": 0}}}}
+}

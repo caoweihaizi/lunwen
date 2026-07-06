@@ -26,16 +26,46 @@ def canonical_audit_hash(audit: Mapping[str, object]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def summarize_access_history(assignments, durations_s):
+    if len(assignments) != len(durations_s) or not assignments:
+        raise ValueError("assignments and durations must be non-empty and aligned")
+    visible = []
+    uncovered_steps = current_uncovered = maximum_uncovered = 0
+    handovers = reattachments = 0
+    previous_sat = None
+    previously_covered = False
+    ever_covered = False
+    for assignment, duration in zip(assignments, durations_s):
+        if duration < 0:
+            raise ValueError("durations must be nonnegative")
+        visible.append(assignment.visible_count)
+        if assignment.access_backlog:
+            uncovered_steps += 1
+            current_uncovered += duration
+            maximum_uncovered = max(maximum_uncovered, current_uncovered)
+            previously_covered = False
+            continue
+        current_uncovered = 0
+        if previously_covered and assignment.selected_sat_id != previous_sat:
+            handovers += 1
+        elif ever_covered and not previously_covered:
+            reattachments += 1
+        previous_sat = assignment.selected_sat_id
+        previously_covered = True
+        ever_covered = True
+    return {
+        "min_visible_count": min(visible), "mean_visible_count": sum(visible) / len(visible),
+        "max_visible_count": max(visible), "uncovered_step_count": uncovered_steps,
+        "max_uncovered_duration_s": maximum_uncovered, "handover_count": handovers,
+        "reattachment_count": reattachments,
+    }
+
+
 def audit_one_orbit(contract: SimulationContract, regions: Sequence[GroundRegion]):
     satellites = build_walker_constellation(contract)
     times = _audit_times(contract.orbit_period_s, contract.time.orbit_update_s)
-    region_states = {
-        region.region_id: {
-            "visible": [], "uncovered_steps": 0, "current_uncovered_s": 0,
-            "max_uncovered_duration_s": 0, "handover_count": 0, "previous_sat": None,
-        }
-        for region in regions
-    }
+    region_histories = {region.region_id: [] for region in regions}
+    durations = []
     errors = []
     maximum_radius_error = 0.0
     directed_counts, undirected_counts, degrees, distances = [], [], [], []
@@ -60,35 +90,16 @@ def audit_one_orbit(contract: SimulationContract, regions: Sequence[GroundRegion
         degrees.extend(degree.values())
         assignments = assign_access(contract, positions, regions)
         duration = times[time_index + 1] - time_s if time_index + 1 < len(times) else 0
+        durations.append(duration)
         for assignment in assignments:
-            state = region_states[assignment.region_id]
-            state["visible"].append(assignment.visible_count)
-            if assignment.access_backlog:
-                state["uncovered_steps"] += 1
-                state["current_uncovered_s"] += duration
-                state["max_uncovered_duration_s"] = max(state["max_uncovered_duration_s"], state["current_uncovered_s"])
-            else:
-                state["current_uncovered_s"] = 0
-                if state["previous_sat"] is not None and assignment.selected_sat_id != state["previous_sat"]:
-                    state["handover_count"] += 1
-                state["previous_sat"] = assignment.selected_sat_id
+            region_histories[assignment.region_id].append(assignment)
     if maximum_radius_error > 1e-9:
         errors.append(f"maximum ECI radius error exceeds tolerance: {maximum_radius_error}")
     if degrees and max(degrees) > contract.isl.intra_plane_neighbors + contract.isl.inter_plane_neighbors_max:
         errors.append(f"maximum node degree exceeds contract: {max(degrees)}")
     region_report = []
-    for region_id in sorted(region_states):
-        state = region_states[region_id]
-        values = state["visible"]
-        region_report.append({
-            "region_id": region_id,
-            "min_visible_count": min(values),
-            "mean_visible_count": sum(values) / len(values),
-            "max_visible_count": max(values),
-            "uncovered_step_count": state["uncovered_steps"],
-            "max_uncovered_duration_s": state["max_uncovered_duration_s"],
-            "handover_count": state["handover_count"],
-        })
+    for region_id in sorted(region_histories):
+        region_report.append({"region_id": region_id, **summarize_access_history(region_histories[region_id], durations)})
     return {
         "status": "PASS" if not errors else "FAIL",
         "errors": errors,

@@ -7,8 +7,8 @@ from pathlib import Path
 
 from mucar_data.contracts import load_simulation_contract
 from mucar_sim.constellation import build_walker_constellation
-from mucar_sim.audit import audit_one_orbit, canonical_audit_hash
-from mucar_sim.coverage import GroundRegion
+from mucar_sim.audit import audit_one_orbit, canonical_audit_hash, summarize_access_history
+from mucar_sim.coverage import AccessAssignment, GroundRegion
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +58,17 @@ class ConstellationTests(unittest.TestCase):
             self.assertEqual(manifest["status"], "PASS")
             self.assertEqual(manifest["region_count"], 980)
             self.assertEqual(len(manifest["canonical_sha256"]), 64)
+
+    def test_access_history_distinguishes_handover_from_reattachment(self):
+        covered_a = AccessAssignment("r", 1, "sat_a", 30.0, False)
+        covered_b = AccessAssignment("r", 1, "sat_b", 30.0, False)
+        uncovered = AccessAssignment("r", 0, None, None, True)
+        continuous = summarize_access_history((covered_a, covered_b), (10, 0))
+        interrupted = summarize_access_history((covered_a, uncovered, covered_b), (10, 10, 0))
+        self.assertEqual(continuous["handover_count"], 1)
+        self.assertEqual(continuous["reattachment_count"], 0)
+        self.assertEqual(interrupted["handover_count"], 0)
+        self.assertEqual(interrupted["reattachment_count"], 1)
 
 
 if __name__ == "__main__":

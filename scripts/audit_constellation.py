@@ -32,14 +32,14 @@ def _render_markdown(audit, validated_at):
         f"- 计划无向边数范围：`{audit['planned_undirected_link_count']}`",
         f"- 节点度范围：`{audit['node_degree']}`", f"- 链路距离范围（km）：`{audit['link_distance_km']}`",
         "", "## 地面覆盖", "", f"- 区域数：`{audit['region_count']}`", "",
-        "| region_id | min visible | mean visible | max visible | uncovered steps | max uncovered (s) | handovers |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| region_id | min visible | mean visible | max visible | uncovered steps | max uncovered (s) | handovers | reattachments |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for region in audit["regions"]:
         lines.append(
             f"| {region['region_id']} | {region['min_visible_count']} | {region['mean_visible_count']:.6f} | "
             f"{region['max_visible_count']} | {region['uncovered_step_count']} | "
-            f"{region['max_uncovered_duration_s']} | {region['handover_count']} |"
+            f"{region['max_uncovered_duration_s']} | {region['handover_count']} | {region['reattachment_count']} |"
         )
     lines.extend(["", "## 错误与警告", "", f"- errors: `{len(audit['errors'])}`", f"- warnings: `{len(audit['warnings'])}`", ""])
     return "\n".join(lines)
