@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research_contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "study_id", "title", "research_questions", "claim_boundaries", "data", "success_targets"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "study_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "research_questions": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "text"],
+        "properties": {"id": {"enum": ["RQ1", "RQ2", "RQ3"]}, "text": {"type": "string", "minLength": 1}}
+      }
+    },
+    "claim_boundaries": {
+      "type": "object", "additionalProperties": false,
+      "required": ["new_foundational_learning_theory", "unconditional_conformal_coverage_under_mar", "generalize_to_commercial_constellations", "generalize_to_onboard_hardware"],
+      "properties": {
+        "new_foundational_learning_theory": {"const": false},
+        "unconditional_conformal_coverage_under_mar": {"const": false},
+        "generalize_to_commercial_constellations": {"const": false},
+        "generalize_to_onboard_hardware": {"const": false}
+      }
+    },
+    "data": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_manifest_ids", "total_traffic_slots", "splits", "window_crosses_split_boundary", "fit_scalers_on", "tune_hyperparameters_on", "conformal_initialization_on", "final_evaluation_on"],
+      "properties": {
+        "source_manifest_ids": {"type": "array", "items": {"type": "string"}, "minItems": 4, "uniqueItems": true},
+        "total_traffic_slots": {"type": "integer", "minimum": 1},
+        "splits": {
+          "type": "object", "additionalProperties": false, "required": ["train", "validation", "calibration", "test"],
+          "properties": {
+            "train": {"$ref": "#/$defs/split"}, "validation": {"$ref": "#/$defs/split"},
+            "calibration": {"$ref": "#/$defs/split"}, "test": {"$ref": "#/$defs/split"}
+          }
+        },
+        "window_crosses_split_boundary": {"const": false},
+        "fit_scalers_on": {"const": "train"},
+        "tune_hyperparameters_on": {"const": ["train", "validation"]},
+        "conformal_initialization_on": {"const": "calibration"},
+        "final_evaluation_on": {"const": "test"}
+      }
+    },
+    "success_targets": {
+      "type": "object", "additionalProperties": false,
+      "required": ["target_interval_coverage", "accepted_coverage_min", "accepted_coverage_max", "quantile_crossing_rate", "formal_seed_count"],
+      "properties": {
+        "target_interval_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "accepted_coverage_min": {"type": "number", "minimum": 0, "maximum": 1},
+        "accepted_coverage_max": {"type": "number", "minimum": 0, "maximum": 1},
+        "quantile_crossing_rate": {"const": 0.0},
+        "formal_seed_count": {"const": 5}
+      }
+    }
+  },
+  "$defs": {
+    "split": {
+      "type": "object", "additionalProperties": false, "required": ["start", "stop", "count"],
+      "properties": {"start": {"type": "integer", "minimum": 0}, "stop": {"type": "integer", "minimum": 1}, "count": {"type": "integer", "minimum": 1}}
+    }
+  }
+}

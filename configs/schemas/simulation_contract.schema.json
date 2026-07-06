@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simulation_contract.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "time", "units", "orbit", "earth", "isl", "link", "coverage", "demand_calibration", "seeds"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "time": {"$ref": "#/$defs/time"},
+    "units": {"$ref": "#/$defs/units"},
+    "orbit": {"$ref": "#/$defs/orbit"},
+    "earth": {"$ref": "#/$defs/earth"},
+    "isl": {"$ref": "#/$defs/isl"},
+    "link": {"$ref": "#/$defs/link"},
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "demand_calibration": {"$ref": "#/$defs/calibration"},
+    "seeds": {"$ref": "#/$defs/seeds"}
+  },
+  "$defs": {
+    "positiveInteger": {"type": "integer", "minimum": 1},
+    "positiveNumber": {"type": "number", "exclusiveMinimum": 0},
+    "time": {
+      "type": "object", "additionalProperties": false,
+      "required": ["epoch_utc", "traffic_interval_s", "service_step_s", "routing_step_s", "orbit_update_s", "telemetry_step_s", "prediction_refresh_s", "prediction_horizons"],
+      "properties": {
+        "epoch_utc": {"type": "string", "pattern": "Z$"},
+        "traffic_interval_s": {"$ref": "#/$defs/positiveInteger"}, "service_step_s": {"$ref": "#/$defs/positiveInteger"},
+        "routing_step_s": {"$ref": "#/$defs/positiveInteger"}, "orbit_update_s": {"$ref": "#/$defs/positiveInteger"},
+        "telemetry_step_s": {"$ref": "#/$defs/positiveInteger"}, "prediction_refresh_s": {"$ref": "#/$defs/positiveInteger"},
+        "prediction_horizons": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 1, "uniqueItems": true}
+      }
+    },
+    "units": {
+      "type": "object", "additionalProperties": false,
+      "required": ["time", "distance", "speed", "rate", "volume", "delay", "configured_angle"],
+      "properties": {"time": {"const": "s"}, "distance": {"const": "km"}, "speed": {"const": "km/s"}, "rate": {"const": "Mbit/s"}, "volume": {"const": "Mbit"}, "delay": {"const": "s"}, "configured_angle": {"const": "degree"}}
+    },
+    "orbit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["constellation_type", "total_satellites", "planes", "satellites_per_plane", "phasing", "altitude_km", "inclination_deg", "eccentricity", "raan_span_deg", "raan_spacing_deg", "propagator"],
+      "properties": {
+        "constellation_type": {"const": "walker_star"}, "total_satellites": {"$ref": "#/$defs/positiveInteger"},
+        "planes": {"$ref": "#/$defs/positiveInteger"}, "satellites_per_plane": {"$ref": "#/$defs/positiveInteger"},
+        "phasing": {"type": "integer", "minimum": 0}, "altitude_km": {"$ref": "#/$defs/positiveNumber"},
+        "inclination_deg": {"type": "number", "minimum": 0, "maximum": 180}, "eccentricity": {"type": "number", "minimum": 0, "exclusiveMaximum": 1},
+        "raan_span_deg": {"type": "number", "exclusiveMinimum": 0, "maximum": 360}, "raan_spacing_deg": {"type": "number", "exclusiveMinimum": 0, "maximum": 360},
+        "propagator": {"const": "analytic_two_body_circular"}
+      }
+    },
+    "earth": {
+      "type": "object", "additionalProperties": false, "required": ["model", "radius_km", "mu_km3_s2", "rotation_rad_s", "light_speed_km_s"],
+      "properties": {"model": {"const": "spherical"}, "radius_km": {"$ref": "#/$defs/positiveNumber"}, "mu_km3_s2": {"$ref": "#/$defs/positiveNumber"}, "rotation_rad_s": {"$ref": "#/$defs/positiveNumber"}, "light_speed_km_s": {"$ref": "#/$defs/positiveNumber"}}
+    },
+    "isl": {
+      "type": "object", "additionalProperties": false, "required": ["storage", "intra_plane_neighbors", "inter_plane_neighbors_max", "connect_star_seam", "inter_plane_pairing", "crosslink_max_abs_lat_deg", "require_earth_clearance", "max_distance_km"],
+      "properties": {"storage": {"const": "directed_edges"}, "intra_plane_neighbors": {"type": "integer", "minimum": 0, "maximum": 2}, "inter_plane_neighbors_max": {"type": "integer", "minimum": 0, "maximum": 2}, "connect_star_seam": {"type": "boolean"}, "inter_plane_pairing": {"const": "mutual_nearest_then_sat_id"}, "crosslink_max_abs_lat_deg": {"type": "number", "minimum": 0, "maximum": 90}, "require_earth_clearance": {"type": "boolean"}, "max_distance_km": {"$ref": "#/$defs/positiveNumber"}}
+    },
+    "link": {
+      "type": "object", "additionalProperties": false, "required": ["capacity_mbps", "buffer_delay_budget_s", "max_wait_s", "queue_discipline", "update_order", "failed_link_service_mbit"],
+      "properties": {"capacity_mbps": {"$ref": "#/$defs/positiveNumber"}, "buffer_delay_budget_s": {"$ref": "#/$defs/positiveNumber"}, "max_wait_s": {"$ref": "#/$defs/positiveNumber"}, "queue_discipline": {"const": "fifo_fluid_volume"}, "update_order": {"const": "arrivals_overflow_service"}, "failed_link_service_mbit": {"const": 0.0}}
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false, "required": ["ground_region_source", "ground_altitude_km", "minimum_elevation_deg", "selection", "uncovered_behavior", "refresh_s"],
+      "properties": {"ground_region_source": {"type": "string", "minLength": 1}, "ground_altitude_km": {"type": "number", "minimum": 0}, "minimum_elevation_deg": {"type": "number", "minimum": 0, "maximum": 90}, "selection": {"const": "maximum_elevation_then_sat_id"}, "uncovered_behavior": {"const": "access_backlog"}, "refresh_s": {"$ref": "#/$defs/positiveInteger"}}
+    },
+    "calibration": {
+      "type": "object", "additionalProperties": false, "required": ["allowed_split", "behavior_policy", "scenario", "statistic", "target", "accepted_min", "accepted_max", "search_min", "search_max", "max_iterations", "relative_tolerance"],
+      "properties": {"allowed_split": {"const": "train"}, "behavior_policy": {"const": "dijkstra"}, "scenario": {"const": "normal_complete_no_failure"}, "statistic": {"const": "p90_active_link_mean_utilization_per_traffic_interval"}, "target": {"type": "number", "minimum": 0, "maximum": 1}, "accepted_min": {"type": "number", "minimum": 0, "maximum": 1}, "accepted_max": {"type": "number", "minimum": 0, "maximum": 1}, "search_min": {"$ref": "#/$defs/positiveNumber"}, "search_max": {"$ref": "#/$defs/positiveNumber"}, "max_iterations": {"$ref": "#/$defs/positiveInteger"}, "relative_tolerance": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}}
+    },
+    "seeds": {
+      "type": "object", "additionalProperties": false, "required": ["development", "formal", "derivation", "key_order", "module_ids"],
+      "properties": {
+        "development": {"type": "integer", "minimum": 0}, "formal": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 5, "maxItems": 5, "uniqueItems": true},
+        "derivation": {"const": "numpy_seedsequence"}, "key_order": {"const": ["master_seed", "scenario_id", "policy_id", "module_id", "replicate_id"]},
+        "module_ids": {"type": "object", "additionalProperties": false, "required": ["demand", "burst", "failure", "missing", "behavior_policy", "model_init", "rl_env"], "properties": {"demand": {"type": "integer"}, "burst": {"type": "integer"}, "failure": {"type": "integer"}, "missing": {"type": "integer"}, "behavior_policy": {"type": "integer"}, "model_init": {"type": "integer"}, "rl_env": {"type": "integer"}}}
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+schema_version: "1.0"
+study_id: mucar_master_thesis
+title: 面向不完整遥测的置信度感知低轨卫星网络流量预测与韧性路由
+research_questions:
+  - id: RQ1
+    text: 联合使用路由状态、缺失掩码、信息年龄和动态拓扑，能否改善不完整遥测下的链路流量预测及跨策略泛化？
+  - id: RQ2
+    text: 因果、延迟标签感知的预测区间能否在动态拓扑、非随机缺失和分布变化下维持接近90%的覆盖？
+  - id: RQ3
+    text: 显式使用预测区间、状态新鲜度和拥塞风险后，是否能在错误预测、突发和故障下改善尾部时延与丢包？
+claim_boundaries:
+  new_foundational_learning_theory: false
+  unconditional_conformal_coverage_under_mar: false
+  generalize_to_commercial_constellations: false
+  generalize_to_onboard_hardware: false
+data:
+  source_manifest_ids: [abilene, worldpop, timezone_boundaries, ground_regions]
+  total_traffic_slots: 48096
+  splits:
+    train: {start: 0, stop: 28857, count: 28857}
+    validation: {start: 28857, stop: 36071, count: 7214}
+    calibration: {start: 36071, stop: 40880, count: 4809}
+    test: {start: 40880, stop: 48096, count: 7216}
+  window_crosses_split_boundary: false
+  fit_scalers_on: train
+  tune_hyperparameters_on: [train, validation]
+  conformal_initialization_on: calibration
+  final_evaluation_on: test
+success_targets:
+  target_interval_coverage: 0.90
+  accepted_coverage_min: 0.87
+  accepted_coverage_max: 0.93
+  quantile_crossing_rate: 0.0
+  formal_seed_count: 5
