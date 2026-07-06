@@ -1,0 +1,20 @@
+{
+  "byte_size": 49203514,
+  "citation": "",
+  "dataset_id": "abilene",
+  "filename": "/Users/zhihao/lunwen/data/raw/abilene/directed-abilene-zhang-5min-over-6months-ALL-native.tgz",
+  "final_url": "https://sndlib.put.poznan.pl/download/directed-abilene-zhang-5min-over-6months-ALL-native.tgz",
+  "generated_outputs": [],
+  "license": "REQUIRES_CONFIRMATION",
+  "manifest_created_at_utc": "2026-07-06T08:47:10.084122+00:00",
+  "media_type": "",
+  "processing_config_sha256": "b32c3af339c184b9f0eb4b09e25f4a06b1c678e71f32dc42b73f18b859195d2b",
+  "release_version": null,
+  "requested_url": "https://sndlib.put.poznan.pl/download/directed-abilene-zhang-5min-over-6months-ALL-native.tgz",
+  "response_headers": {},
+  "retrieved_at_utc": "2026-07-06T07:44:38+00:00",
+  "reused": true,
+  "role": "temporal_od_pattern",
+  "sha256": "2f311130d77e40db88da1aa6db8055b6fce8d077bf4bae87398563e1b84e70ce",
+  "source_page": "https://sndlib.put.poznan.pl/abilene.overview.action"
+}

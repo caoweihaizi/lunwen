@@ -1,0 +1,22 @@
+{
+  "byte_size": 289453748,
+  "citation": "10.5258/SOTON/WP00845",
+  "dataset_id": "worldpop",
+  "filename": "/Users/zhihao/lunwen/data/raw/worldpop/global_pop_2025_CN_1km_R2025A_v1.tif",
+  "final_url": "https://data.worldpop.org/GIS/Population/Global_2015_2030/R2025A/2025/0_Mosaicked/v1/1km/constrained/global_pop_2025_CN_1km_R2025A_v1.tif",
+  "generated_outputs": [],
+  "license": "CC-BY-4.0",
+  "manifest_created_at_utc": "2026-07-06T08:47:10.326984+00:00",
+  "media_type": "",
+  "processing_config_sha256": "c1ca0371f8dbc918c3a66e55095cd2a6e07e2ba83bd0042ee27ecdd61eea3c52",
+  "release_version": "R2025A",
+  "requested_url": "https://data.worldpop.org/GIS/Population/Global_2015_2030/R2025A/2025/0_Mosaicked/v1/1km/constrained/global_pop_2025_CN_1km_R2025A_v1.tif",
+  "response_headers": {
+    "Content-Length": "289453748"
+  },
+  "retrieved_at_utc": "2026-07-06T08:41:59.616021+00:00",
+  "reused": true,
+  "role": "spatial_population_weight",
+  "sha256": "478d81441d39b0548c6f1a1a1d713ac7a2bf32483671c4fe0864f2d8f16cc56c",
+  "source_page": "https://hub.worldpop.org/geodata/listing?id=137"
+}

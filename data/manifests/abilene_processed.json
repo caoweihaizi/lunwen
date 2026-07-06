@@ -1,0 +1,12 @@
+{
+  "byte_size": 103856957,
+  "dataset_id": "abilene_processed",
+  "filename": "/Users/zhihao/lunwen/data/processed/abilene/od_timeseries.csv.gz",
+  "generated_outputs": [
+    "/Users/zhihao/lunwen/data/processed/abilene/od_timeseries.csv.gz"
+  ],
+  "manifest_created_at_utc": "2026-07-06T07:58:08.270046+00:00",
+  "processing_config_sha256": "b7256f770c08e51c5a2ed047a2d4954e45b638143fb85bb8e3b832501128f29b",
+  "role": "temporal_od_pattern",
+  "sha256": "ef66c29c72b537fa291a1df373f1b12ecf039ca57ac7800633a14a2cc753dcaa"
+}

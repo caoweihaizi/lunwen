@@ -1,0 +1,20 @@
+{
+  "byte_size": 26118663,
+  "citation": "",
+  "dataset_id": "timezone_boundaries",
+  "filename": "/Users/zhihao/lunwen/data/raw/timezone_boundaries/timezones-with-oceans-now-2026b.geojson.zip",
+  "final_url": "https://github.com/evansiroky/timezone-boundary-builder/releases/download/2026b/timezones-with-oceans-now.geojson.zip",
+  "generated_outputs": [],
+  "license": "ODbL-1.0",
+  "manifest_created_at_utc": "2026-07-06T08:47:10.105009+00:00",
+  "media_type": "",
+  "processing_config_sha256": "3812fc6923bb2470a0b7ea035feffc85d75c55cba47ff2159b8531812ca6635d",
+  "release_version": "2026b",
+  "requested_url": "https://github.com/evansiroky/timezone-boundary-builder/releases/download/2026b/timezones-with-oceans-now.geojson.zip",
+  "response_headers": {},
+  "retrieved_at_utc": "2026-07-06T07:49:36+00:00",
+  "reused": true,
+  "role": "local_time_mapping",
+  "sha256": "1df4a7a638bf5939bd025ba352f8d194af59740c7c237b232638d86ab329e32c",
+  "source_page": "https://github.com/evansiroky/timezone-boundary-builder"
+}

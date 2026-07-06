@@ -1,0 +1,10 @@
+{
+  "byte_size": 103856957,
+  "directed_od_count": 132,
+  "first_timestamp": "20040301-0000",
+  "last_timestamp": "20040910-2355",
+  "matrix_count": 48096,
+  "node_count": 12,
+  "sha256": "ef66c29c72b537fa291a1df373f1b12ecf039ca57ac7800633a14a2cc753dcaa",
+  "training_total_median": 2830.715213
+}

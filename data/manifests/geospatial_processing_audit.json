@@ -1,0 +1,36 @@
+{
+  "population": {
+    "bounds": [
+      -180.0,
+      -59.99999942400001,
+      179.99999856000005,
+      84.0
+    ],
+    "crs": "EPSG:4326",
+    "grid_degrees": 5.0,
+    "height": 17280,
+    "invalid_cell_count": 695180367,
+    "nodata": -99999.0,
+    "population_weight_sum": 0.9999999999999984,
+    "region_count": 980,
+    "transform": [
+      0.0083333333,
+      0.0,
+      -180.0,
+      0.0,
+      -0.0083333333,
+      84.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "valid_cell_count": 51315633,
+    "valid_population_total": 8195439313.76056,
+    "width": 43200
+  },
+  "timezone": {
+    "maximum_nearest_distance_degrees": 0.0,
+    "timezone_feature_count": 65,
+    "unmatched_region_count": 0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "byte_size": 85551,
+  "dataset_id": "ground_regions",
+  "filename": "/Users/zhihao/lunwen/data/processed/geospatial/ground_regions.csv",
+  "generated_outputs": [
+    "/Users/zhihao/lunwen/data/processed/geospatial/ground_regions.csv"
+  ],
+  "license": "CC-BY-4.0 AND ODbL-1.0",
+  "manifest_created_at_utc": "2026-07-06T08:46:56.552031+00:00",
+  "processing_config_sha256": "69259dbc23932de809b3f8f94bda59ce3c7abf3b49d9482e033b89a0751b757e",
+  "role": "spatial_population_weight",
+  "sha256": "0d3fd04f2bb4f8b8ad12c72ce7faaaffcd02745b4bc7ad555dd308e1375d89b9"
+}
