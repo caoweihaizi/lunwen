@@ -1,0 +1,17 @@
+.DS_Store
+.codex/
+__pycache__/
+.pytest_cache/
+.venv/
+
+# Large/reproducible research data and experiment outputs
+data/raw/
+data/interim/
+data/processed/
+artifacts/
+checkpoints/
+results/
+
+# Keep manifests and small fixtures under version control
+!data/manifests/
+!tests/data/
